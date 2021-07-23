@@ -1,5 +1,14 @@
 # Greedy Gradient Ensemble for De-biased VQA
-This repo uses features from [A negative case analysis of visual grounding methods for VQA](https://github.com/erobic/negative_analysis_of_grounding). Some codes are modified from [CSS](https://github.com/chrisc36/bottom-up-attention-vqa) and [UpDn](https://github.com/chrisc36/bottom-up-attention-vqa).
+Code release for "Greedy Gradient Ensemble for Robust Visual Question Answering" (ICCV 2021) 
+
+```
+@inproceedings{han2015greedy,
+	title={Greedy Gradient Ensemble for Robust Visual Question Answering},
+	author={Han, Xinzhe and Wang, Shuhui and Su, Chi and Huang, Qingming and Tian, Qi},
+	booktitle={Proceedings of the IEEE international conference on computer vision},
+	year={2021}
+}
+```
 
 ## Prerequisites
 
@@ -19,7 +28,6 @@ We use Anaconda to manage our dependencies . You will need to execute the follow
 - Download questions/answers for VQAv2 and VQA-CPv2 by executing `bash tools/download.sh`
 - Download visual cues/hints provided in [A negative case analysis of visual grounding methods for VQA](https://drive.google.com/drive/folders/1fkydOF-_LRpXK1ecgst5XujhyQdE6It7?usp=sharing) into `data/hints`. Note that we use caption based hints for our experiments.
 - Preprocess process the data with `bash tools/process.sh`
-
 
 ## Training GGE
 Run
@@ -53,3 +61,8 @@ CUDA_VISIBLE_DEVICES=0 python sensitivity.py --dataset cpv2 --debias METHOD --lo
 ```
 ## Visualization
 We provide visualization in `visualization.ipynb`. If you want to see other visualization by yourself, download MS-COCO 2014 to `data/images`.
+
+## Acknowledgements
+
+This repo uses features from [A negative case analysis of visual grounding methods for VQA](https://github.com/erobic/negative_analysis_of_grounding). Some codes are modified from [CSS](https://github.com/chrisc36/bottom-up-attention-vqa) and [UpDn](https://github.com/chrisc36/bottom-up-attention-vqa).
+
