@@ -82,7 +82,7 @@ class BaseModel(nn.Module):
             elif loss_type == 'tog':
                 y_gradient = 2 * labels * torch.sigmoid(-2 * labels * bias)
                 loss_q = F.binary_cross_entropy_with_logits(q_out, y_gradient)
-                ref_logits = torch.sigmoid(q_out) + bias
+                ref_logits = torch.sigmoid(q_pred) + bias
                 y_gradient = 2 * labels * torch.sigmoid(-2 * labels * ref_logits)
                 loss = F.binary_cross_entropy_with_logits(logits, y_gradient) + loss_q
                 loss *= labels.size(1)
