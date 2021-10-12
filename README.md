@@ -1,5 +1,5 @@
 # Greedy Gradient Ensemble for De-biased VQA
-Code release for "Greedy Gradient Ensemble for Robust Visual Question Answering" (ICCV 2021). GGE can extend to other tasks with dataset biases.
+Code release for "Greedy Gradient Ensemble for Robust Visual Question Answering" (ICCV 2021, Oral). GGE can extend to other tasks with dataset biases.
 
 ```
 @inproceedings{han2015greedy,
