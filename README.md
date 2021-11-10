@@ -64,5 +64,5 @@ We provide visualization in `visualization.ipynb`. If you want to see other visu
 
 ## Acknowledgements
 
-This repo uses features from [A negative case analysis of visual grounding methods for VQA](https://github.com/erobic/negative_analysis_of_grounding). Some codes are modified from [CSS](https://github.com/chrisc36/bottom-up-attention-vqa) and [UpDn](https://github.com/chrisc36/bottom-up-attention-vqa).
+This repo uses features from [A negative case analysis of visual grounding methods for VQA](https://github.com/erobic/negative_analysis_of_grounding). Some codes are modified from [CSS](https://github.com/yanxinzju/CSS-VQA) and [UpDn](https://github.com/chrisc36/bottom-up-attention-vqa).
 
