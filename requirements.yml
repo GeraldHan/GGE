@@ -54,7 +54,7 @@ dependencies:
   - py-opencv=3.4.2=py37hb342d67_1
   - pycparser=2.19=py37_0
   - python=3.7.1=h0371630_7
-  - pytorch=1.2.0=py3.7_cuda10.0.130_cudnn7.6.2_0
+  - pytorch=1.7.1=py3.7_cuda11.0.221_cudnn8.0.5_0
   - readline=7.0=h7b6447c_5
   - setuptools=41.4.0=py37_0
   - sqlite=3.30.0=h7b6447c_0
@@ -91,7 +91,7 @@ dependencies:
     - srsly==0.1.0
     - statsmodels==0.10.2
     - thinc==7.1.1
-    - torch==1.2.0
+    - torch==1.7.1
     - torchvision==0.4.0
     - tqdm==4.36.1
     - urllib3==1.25.6
