@@ -65,12 +65,13 @@ We provide visualization in `visualization.ipynb`. If you want to see other visu
 ## Addition Note
 Sorry for wrong derivation of the negitive gradient for Sigmoid+BCE loss.
 The correct negtive gradient is
+
 $$
 	\nabla \mathcal{H}_i= y_i - \sigma(\mathcal{H}_i)
 $$
 
 In theory, as long as the the psuedo label has negative correlation with the bias model predition, it is able to mine the hard examples.
-The wrong gradient in the paper is actually an approximation of $\nabla \mathcal{H}_i $ That's why it still works well.
+The wrong gradient in the paper is actually an approximation of $\nabla \mathcal{H}_i$. That's why it still works well.
 
 ## Acknowledgements
 
