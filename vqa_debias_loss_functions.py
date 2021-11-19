@@ -201,7 +201,10 @@ class GreedyGradient(DebiasLossFn):
     def forward(self, hidden, logits, bias, labels):
 
         ## compute gradient for BCEloss function
-        y_gradient = 2 * labels * torch.sigmoid(-2 * labels * bias)
+        # approximation in the paper (wrong)
+        #y_gradient = 2 * labels * torch.sigmoid(-2 * labels * bias)
+        # right gradient
+        y_gradient = labels - bias
         
         loss = F.binary_cross_entropy_with_logits(logits, y_gradient)
         loss *= labels.size(1)
