@@ -62,6 +62,16 @@ CUDA_VISIBLE_DEVICES=0 python sensitivity.py --dataset cpv2 --debias METHOD --lo
 ## Visualization
 We provide visualization in `visualization.ipynb`. If you want to see other visualization by yourself, download MS-COCO 2014 to `data/images`.
 
+## Addition Note
+Sorry for wrong derivation of the negitive gradient for Sigmoid+BCE loss.
+The correct negtive gradient is
+$$
+	\nabla \mathcal{H}_i= y_i - \sigma(\mathcal{H}_i)
+$$
+
+In theory, as long as the the psuedo label has negative correlation with the bias model predition, it is able to mine the hard examples.
+The wrong gradient in the paper is actually an approximation of $\nabla \mathcal{H}_i $ That's why it still works well.
+
 ## Acknowledgements
 
 This repo uses features from [A negative case analysis of visual grounding methods for VQA](https://github.com/erobic/negative_analysis_of_grounding). Some codes are modified from [CSS](https://github.com/yanxinzju/CSS-VQA) and [UpDn](https://github.com/chrisc36/bottom-up-attention-vqa).
