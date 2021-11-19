@@ -74,7 +74,7 @@ class BaseModel(nn.Module):
                 loss = self.debias_loss_fn(None, q_out, bias, labels)
 
             elif loss_type == 'joint':
-                ref_logits = torch.sigmoid(q_pred) + bias
+                ref_logits = torch.sigmoid(q_pred + torch.logit(bias))
                 loss = self.debias_loss_fn(None, logits, ref_logits, labels)
                 # y_gradient = 2 * labels * torch.sigmoid(-2 * labels * ref_logits)
                 # loss = F.binary_cross_entropy_with_logits(logits, y_gradient)
