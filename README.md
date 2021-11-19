@@ -63,14 +63,14 @@ CUDA_VISIBLE_DEVICES=0 python sensitivity.py --dataset cpv2 --debias METHOD --lo
 We provide visualization in `visualization.ipynb`. If you want to see other visualization by yourself, download MS-COCO 2014 to `data/images`.
 
 ## Addition Note
-Sorry for wrong derivation of the negitive gradient for Sigmoid+BCE loss.
-The correct negtive gradient is
+Sorry for the wrong derivation of the negative gradient for Sigmoid+BCE loss.
+The correct negative gradient is
 
 $$
 	\nabla \mathcal{H}_i= y_i - \sigma(\mathcal{H}_i)
 $$
 
-In theory, as long as the the psuedo label has negative correlation with the bias model predition, it is able to mine the hard examples.
+In theory, as long as the pseudo label has a negative correlation with the bias model prediction, it is able to mine the hard examples.
 The wrong gradient in the paper is actually an approximation of $\nabla \mathcal{H}_i$. That's why it still works well.
 
 ## Acknowledgements
