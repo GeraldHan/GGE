@@ -202,9 +202,9 @@ class GreedyGradient(DebiasLossFn):
 
         ## compute gradient for BCEloss function
         # approximation in the paper (wrong)
-        #y_gradient = 2 * labels * torch.sigmoid(-2 * labels * bias)
+        y_gradient = 2 * labels * torch.sigmoid(-2 * labels * bias)
         # right gradient
-        y_gradient = torch.clamp(labels - bias, min=0, max=1.).detach()
+        #y_gradient = torch.clamp(labels - bias, min=0, max=1.).detach()
         
         loss = F.binary_cross_entropy_with_logits(logits, y_gradient)
         loss *= labels.size(1)
