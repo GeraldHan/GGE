@@ -11,12 +11,13 @@ from torch.utils.data import DataLoader
 import numpy as np
 
 from dataset import Dictionary, VQAFeatureDataset
-import base_model
+# import base_model
+# import base_model_sf as base_model
 # import base_model_block as base_model
 # import base_model_ban as base_model
 # import base_model_ab as base_model
 # import base_model_v_only as base_model
-# import base_model_sfce as base_model
+import base_model_sfce as base_model
 
 # from train_ab import train
 from train_GGE import train
@@ -44,16 +45,16 @@ def parse_args():
         help="Entropy regularizer weight for the learned_mixin model")
     parser.add_argument(
         '--mode', default="base",
-        choices=["updn", "base", "v_inverse","v_debias", "inv_sup", "gge_iter", "gge_tog", "gge_d_bias", "gge_q_bias"],
+        choices=["updn", "base", "v_inverse","v_debias", "zero_out", "gge_iter", "gge_tog", "gge_d_bias", "gge_q_bias"],
         help="Kind of ensemble loss to use")
     parser.add_argument(
         '--debias', default="learned_mixin",
-        choices=["learned_mixin", "reweight", "bias_product", "none","focal", "gradient", "gradient_sfce"],
+        choices=["learned_mixin", "reweight", "bias_product", "none","focal", "gradient", "gradient_sfce", "decompose"],
         help="Kind of ensemble loss to use")
     parser.add_argument(
         '--topq', type=int,default=1,
         choices=[1,2,3],
-        help="num of words to be masked in questio")
+        help="num of words to be masked in question")
     parser.add_argument(
         '--keep_qtype', default=True,
         help="keep qtype or not")
@@ -115,8 +116,7 @@ def get_bias(train_dset,eval_dset):
         for ex in ds.entries:
             q_type = ex["answer"]["question_type"]
             ex["bias"] = question_type_to_prob_array[q_type]
-
-
+            
 
 def main():
     args = parse_args()
@@ -176,6 +176,8 @@ def main():
         model.debias_loss_fn = GreedyGradient()
     elif args.debias=='gradient_sfce':
         model.debias_loss_fn = GreedyGradient_softmaxCE()
+    elif args.debias=='decompose':
+        model.debias_loss_fn = Decompose()
     else:
         raise RuntimeError(args.mode)
 

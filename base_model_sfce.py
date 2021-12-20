@@ -37,7 +37,7 @@ class BaseModel(nn.Module):
         self.vision_lin = torch.nn.Linear(1024, 1)
         self.question_lin = torch.nn.Linear(1024, 1)
 
-    def forward(self, v, q, labels, bias, v_mask, q_mask, loss_type = None):
+    def forward(self, v, q, labels, bias, v_mask, q_mask, loss_type = None, weight=0.9):
         """Forward
 
         v: [batch, num_objs, obj_dim]
@@ -68,25 +68,31 @@ class BaseModel(nn.Module):
 
         q_out=self.c_2(q_pred)
 
-        q_out = F.softmax(q_out, dim=1)
-        logits = F.softmax(logits, dim=1)
-
+        # q_out = F.softmax(q_out, dim=1)
+        # logits = F.softmax(logits, dim=1)
 
         if labels is not None:
             if loss_type == 'q':
-                loss = F.binary_cross_entropy(q_out, labels)
+                loss = self.debias_loss_fn(None, q_out, bias, labels, 0.)
+                # loss = F.binary_cross_entropy_with_logits(q_out, labels)
 
             elif loss_type == 'joint':
-                ref_logits = q_out 
-                loss = self.debias_loss_fn(None, logits, ref_logits, labels)
-
+                ref_logits = (q_out.softmax(1) + bias) 
+                # ref_logits = q_out.softmax(1)
+                ref_logits = torch.clamp(ref_logits, min=0., max=1.) * labels
+                loss = self.debias_loss_fn(None, logits, ref_logits, labels, weight)
+            
             elif loss_type == 'q_bias':
                 loss_q = F.binary_cross_entropy(q_out, labels)
                 ref_logits = q_out
-                loss = self.debias_loss_fn(None, logits, ref_logits, labels) + loss_q
+                loss = self.debias_loss_fn(None, logits, ref_logits, labels, weight) + loss_q
+
+            elif loss_type == 'd_bias':
+                loss = self.debias_loss_fn(None, logits, bias, labels, weight)
+
 
             else:
-                loss = self.debias_loss_fn(joint_repr, logits, bias, labels).mean(0)
+                loss = F.binary_cross_entropy(logits, labels)
         else:
             loss = None
 

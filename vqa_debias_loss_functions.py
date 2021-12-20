@@ -201,12 +201,33 @@ class GreedyGradient(DebiasLossFn):
     def forward(self, hidden, logits, bias, labels):
 
         ## compute gradient for BCEloss function
-        # approximation in the paper (wrong)
-        y_gradient = 2 * labels * torch.sigmoid(-2 * labels * bias)
-        # right gradient
-        #y_gradient = torch.clamp(labels - bias, min=0, max=1.).detach()
+        # y_gradient = 2 * labels * torch.sigmoid(-2 * labels * bias)
+        y_gradient = torch.clamp(labels - bias, min=0, max=1.).detach()
+
+        # loss1 = F.binary_cross_entropy_with_logits(bias, labels, reduction='none').sum(1)
+
+        # y_gradient = - (torch.autograd.grad(loss1.mean(), bias, create_graph=True)[0]) * (labels > 0.).float() 
+
+        # y_gradient = torch.clamp(y_gradient, min=0, max=1.).detach()
         
         loss = F.binary_cross_entropy_with_logits(logits, y_gradient)
+        loss *= labels.size(1)
+
+        return loss
+
+class Decompose(DebiasLossFn):
+    # def __init__(self):
+    #     super(GreedyGradient, self).__init__()
+    #     self.vision_lin = torch.nn.Linear(1024, 1)
+    #     self.question_lin = torch.nn.Linear(1024,1)    
+    def forward(self, hidden, logits, bias, labels, weight):
+
+        # log_prob, log_one_minus_prob = convert_sigmoid_logits_to_binary_logprobs(logits)
+        # loss_1 = -(log_prob * labels + (1 - labels) * log_one_minus_prob).mean()
+        loss_1 = -(logits.log_softmax(-1) * labels).mean()
+        loss_2 = -(logits.log_softmax(-1) * bias).mean()
+
+        loss = loss_1 - weight * (loss_2)
         loss *= labels.size(1)
 
         return loss
@@ -220,11 +241,13 @@ class GreedyGradient_softmaxCE(DebiasLossFn):
 
         ## compute gradient for BCEloss function
 #         y_gradient = 2 * labels * torch.sigmoid(-2 * labels * bias)
-        # compute gradient for softmax CE function
+        ## compute gradient for softmax CE function
         y_gradient = torch.clamp(labels - bias, min=0, max=1.).detach()
 
-        loss = F.binary_cross_entropy(logits, y_gradient)
-        # loss = - (logits.log() * y_gradient).sum(1).mean(0)
+        loss = - (logits.log_softmax(-1) * y_gradient).sum(1).mean(0) # F.binary_cross_entropy(logits, y_gradient)
+        
+        # bias_pred = torch.clamp(bias.detach() * labels, min=0, max=1.)
+        # loss = - (logits.log_softmax(-1) * labels).sum(1).mean(0) + 0.85 * (logits.log_softmax(-1) * bias_pred).sum(1).mean(0)
         
         # loss = F.binary_cross_entropy_with_logits(logits, labels)
 

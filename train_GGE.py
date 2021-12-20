@@ -12,6 +12,7 @@ import numpy as np
 from tqdm import tqdm
 import random
 import copy
+import math
 import time
 
 
@@ -55,28 +56,31 @@ def train(model, train_loader, eval_loader,args,qid2type):
         for i, (v, q, a, b, hintscore,type_mask,notype_mask,q_mask) in tqdm(enumerate(train_loader), ncols=100,
                                                    desc="Epoch %d" % (epoch + 1), total=len(train_loader)):
             total_step += 1
-
+            
+            scale = math.sin(math.pi/2 * (epoch+30) / (num_epochs+30)) 
+            # scale = 1 / (1 + math.exp(-10 * epoch / num_epochs))
             #########################################
             v = Variable(v).cuda().requires_grad_()
             q = Variable(q).cuda()
             q_mask=Variable(q_mask).cuda()
             a = Variable(a).cuda()
-            b = Variable(b).cuda()
+            b = Variable(b).cuda().requires_grad_()
             hintscore = Variable(hintscore).cuda()
             type_mask=Variable(type_mask).float().cuda()
             notype_mask=Variable(notype_mask).float().cuda()
             #########################################
             assert mode in ['base', 'gge_iter', 'gge_tog', 'gge_d_bias', 'gge_q_bias'], " %s not in modes. Please \'import train_ab as train\' in main.py" % mode
             if mode == 'gge_iter':
-                pred, loss, _ = model(v, q, a, b, None, q_mask, loss_type = 'q')
+                pred, loss, _ = model(v, q, a, b, None, q_mask, loss_type = 'q', weight=scale)
                 if (loss != loss).any():
                     raise ValueError("NaN loss")
                 loss.backward()
+
                 nn.utils.clip_grad_norm_(model.parameters(), 0.25)
                 optim.step()
-                optim.zero_grad()
+                # optim.zero_grad()
 
-                pred, loss, _ = model(v, q, a, b, None, q_mask, loss_type = 'joint')
+                pred, loss, _ = model(v, q, a, b, None, q_mask, loss_type = 'joint', weight=scale)
                 if (loss != loss).any():
                     raise ValueError("NaN loss")
                 loss.backward()
