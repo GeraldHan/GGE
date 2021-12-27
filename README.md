@@ -13,12 +13,11 @@ Code release for "Greedy Gradient Ensemble for Robust Visual Question Answering"
 We improve the generalization of GGE and present General Greedy De-bias ([GGD](https://github.com/GeraldHan/GGD)).
 
 ```
-@inproceedings{han2021greedy,
-  title={Greedy gradient ensemble for robust visual question answering},
-  author={Han, Xinzhe and Wang, Shuhui and Su, Chi and Huang, Qingming and Tian, Qi},
-  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
-  pages={1584--1593},
-  year={2021}
+@article{han2021general,
+	title={General Greedy De-bias Learning},
+	author={Han, Xinzhe and Wang, Shuhui and Su, Chi and Huang, Qingming and Tian, Qi},
+	journal={arXiv preprint arXiv:2112.10572 },
+	year={2021}
 }
 ```
 
