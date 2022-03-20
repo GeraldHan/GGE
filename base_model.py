@@ -77,7 +77,7 @@ class BaseModel(nn.Module):
             elif loss_type == 'joint':
                 ref_logits = torch.sigmoid(q_pred) + bias
                 # ref_logits = q_pred + torch.logit(bias)
-                loss = self.debias_loss_fn(None, logits, ref_logits, labels, weight)
+                loss = self.debias_loss_fn(None, logits, ref_logits, labels)
                 # ref_logits = F.softmax(torch.sigmoid(q_pred) + bias, dim=-1)
                 # loss = self.debias_loss_fn(None, logits, ref_logits, labels)
 
@@ -91,13 +91,13 @@ class BaseModel(nn.Module):
                 loss *= labels.size(1)
 
             elif loss_type == 'd_bias':
-                loss = self.debias_loss_fn(None, logits, bias, labels, weight)
+                loss = self.debias_loss_fn(None, logits, bias, labels)
 
             elif loss_type == 'q_bias':
                 loss_q = F.binary_cross_entropy_with_logits(q_out, labels) * labels.size(1)
                 # ref_logits = torch.sigmoid(q_out)
                 ref_logits = q_out
-                loss = self.debias_loss_fn(None, logits, ref_logits, labels, weight) + loss_q
+                loss = self.debias_loss_fn(None, logits, ref_logits, labels) + loss_q
 
             else:
                 loss = self.debias_loss_fn(joint_repr, logits, bias, labels).mean(0)
