@@ -17,7 +17,7 @@ import numpy as np
 from tqdm import tqdm
 import random
 
-import base_model_block as base_model
+import base_model as base_model
 
 from vqa_debias_loss_functions import *
 
