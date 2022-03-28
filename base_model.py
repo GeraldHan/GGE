@@ -70,7 +70,7 @@ class BaseModel(nn.Module):
 
         if labels is not None:
             if loss_type == 'q':
-                bias = torch.logit(bias)
+#                 bias = torch.logit(bias)
                 loss = self.debias_loss_fn(None, q_out, bias, labels)
                 # loss = F.binary_cross_entropy_with_logits(q_out, labels) * labels.size(1)
 
